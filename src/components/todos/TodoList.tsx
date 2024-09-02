@@ -3,7 +3,7 @@ import TodoItems from "./TodoItems";
 
 const TodoList = ({ title, todos }: TodoListProps) => {
   return (
-    <div>
+    <div className="todo-list-wrapper">
       <h2>{title}</h2>
       <ul>
         {todos.length > 0 ? (

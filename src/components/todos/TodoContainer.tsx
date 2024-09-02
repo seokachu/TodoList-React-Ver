@@ -3,8 +3,11 @@ import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import { getTodos } from "../../api/todos";
 import Loading from "../layout/Loading";
+import Today from "./Today";
+import Search from "./Search";
 
 const TodoContainer = () => {
+
   const query = useQuery({
     queryKey: ["todos"],
     queryFn: getTodos,
@@ -22,10 +25,12 @@ const TodoContainer = () => {
   const doneTodos = query?.data?.filter((todos) => todos.isDone) ?? [];
 
   return (
-    <main>
+    <main className="main">
+      <Today />
       <TodoForm />
-      <TodoList title="Working" todos={workingTodos} />
-      <TodoList title="Done" todos={doneTodos} />
+      <Search />
+      <TodoList title="🔥 Working" todos={workingTodos} />
+      <TodoList title="✨ Done" todos={doneTodos} />
     </main>
   );
 };

@@ -7,7 +7,7 @@ import { toast } from "react-toastify";
 const TodoForm = () => {
   const queryClient = useQueryClient();
   const id = useId();
-  const [titleError, setTitleError] = useState("");
+  const [content, setContent] = useState("");
   const [contentError, setContentError] = useState("");
 
   const createTodo = useMutation({
@@ -17,35 +17,29 @@ const TodoForm = () => {
     },
   });
 
+  const handleContent = (e: ChangeEvent<HTMLInputElement>) => {
+    setContent(e.target.value);
+    if (e.target.value !== "") {
+      setContentError("");
+    }
+  };
+
   //작성 form
   const onSubmitHandler = (e: ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
-    const title = formData.get("title") as string | null;
-    const content = formData.get("content") as string | null;
-
-    if (!title?.trim()) {
-      setTitleError("제목을 입력해 주세요.");
-    } else if (e.target.value !== "") {
-      setTitleError("");
-    }
 
     if (!content?.trim()) {
       setContentError("내용을 입력해 주세요.");
-    } else if (e.target.value !== "") {
-      setContentError("");
     }
 
-    if (title && content) {
+    if (content) {
       const nextTodo = {
         id: crypto.randomUUID(),
-        title,
         content,
         isDone: false,
       };
       createTodo.mutate(nextTodo);
-      e.target.reset();
-      setTitleError("");
+      setContent("");
       setContentError("");
       toast.success("할일이 등록되었습니다.");
     }
@@ -53,30 +47,22 @@ const TodoForm = () => {
 
   return (
     <div>
-      <form onSubmit={onSubmitHandler}>
+      <form onSubmit={onSubmitHandler} className="form-wrapper">
         <div>
-          <label htmlFor={`${id}-title`}>제목</label>
-          <input
-            type="text"
-            placeholder="제목을 입력해 주세요."
-            autoFocus
-            name="title"
-            id={`${id}-title`}
-          />
-          <p>{titleError}</p>
-        </div>
-        <div>
-          <label htmlFor={`${id}-content`}>내용</label>
-          <input
-            type="text"
-            placeholder="내용을 입력해 주세요."
-            autoFocus
-            name="content"
-            id={`${id}-content`}
-          />
+          <label htmlFor={`${id}-content`}>
+            <input
+              type="text"
+              placeholder="새로운 Todo..."
+              name="content"
+              id={`${id}-content`}
+              autoFocus
+              value={content}
+              onChange={handleContent}
+            />
+          </label>
           <p>{contentError}</p>
         </div>
-        <button type="submit">등록</button>
+        <button type="submit">추가</button>
       </form>
     </div>
   );

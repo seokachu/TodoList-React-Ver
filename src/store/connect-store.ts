@@ -4,8 +4,7 @@ import { ConnectState, Todo } from "../types";
 const useConnectStore = create<ConnectState>((set) => ({
   todos: [],
   actions: {
-    setTodos: (update: (prev: Todo[]) => Todo[]) =>
-      set((state) => ({ todos: update(state.todos) })),
+    setTodos: (todos: Todo[]) => set({ todos }),
   },
 }));
 

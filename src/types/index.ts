@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction } from "react";
 
 export interface Todo {
   id: string;
-  title: string;
   content: string;
   isDone: boolean;
 }
@@ -23,6 +22,6 @@ export interface TodoItem {
 export interface ConnectState {
   todos: Todo[];
   actions: {
-    setTodos: (update: (prev: Todo[]) => Todo[]) => void;
+    setTodos: (todos: Todo[]) => void;
   };
 }

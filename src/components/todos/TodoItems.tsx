@@ -4,7 +4,7 @@ import { deleteTodos, patchTodos } from "../../api/todos";
 import { toast } from "react-toastify";
 
 const TodoItems = ({ item }: TodoItem) => {
-  const { id, title, content, isDone } = item;
+  const { id, content, isDone } = item;
   const queryClient = useQueryClient();
 
   //삭제
@@ -20,7 +20,6 @@ const TodoItems = ({ item }: TodoItem) => {
     mutationFn: async (id: string) =>
       await patchTodos(id, {
         id,
-        title,
         content,
         isDone: !isDone,
       }),
@@ -50,14 +49,13 @@ const TodoItems = ({ item }: TodoItem) => {
   };
 
   return (
-    <div>
+    <div className="todo-list">
       <div>
-        <h3>{title}</h3>
         <p>{content}</p>
       </div>
-      <div>
+      <div className="todo-list-button">
         <button onClick={onClickDeleteTodo}>삭제</button>
-        <button onClick={onClickToggle}>{isDone ? "취소" : "확인"}</button>
+        <button onClick={onClickToggle}>{isDone ? "취소" : "완료"}</button>
       </div>
     </div>
   );
