@@ -1,44 +1,32 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { useConnectActions, useTodos } from "../../store/connect-store";
-import useDebounce from "../../utils/useSearchDebounce";
-import { Todo } from "../../types";
+import useDebounce from "../../hooks/useSearchDebounce";
 
 const Search = () => {
   const [search, setSearch] = useState("");
   const { debouncedValue } = useDebounce(search, 500);
   const todos = useTodos();
-  const { setTodos } = useConnectActions();
-  const [filteredTodos, setFilteredTodos] = useState<Todo[]>([]);
-
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    setSearch(e.target.value);
-  };
+  const { setFilteredTodos } = useConnectActions();
 
   useEffect(() => {
-    if (!debouncedValue.trim()) {
-      return;
-    }
-
     const filteredKeyword = todos.filter((item) =>
       item.content.toLowerCase().includes(debouncedValue.toLowerCase())
     );
-
     setFilteredTodos(filteredKeyword);
-  }, [todos, debouncedValue]);
+  }, [debouncedValue, setFilteredTodos, todos]);
 
-  //상태 업데이트가 실제로 변화가 있을때 업데이트
-  useEffect(() => {
-    setTodos(filteredTodos);
-  }, [filteredTodos, setTodos]);
+  const handlerSearch = (e: ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+  };
 
   return (
     <div className="search-wrapper">
-      <form>
+      <form onSubmit={handlerSearch}>
         <input
           type="text"
           placeholder="검색어를 입력해 주세요."
           value={search}
-          onChange={handleSearch}
+          onChange={(e) => setSearch(e.target.value)}
         />
       </form>
     </div>

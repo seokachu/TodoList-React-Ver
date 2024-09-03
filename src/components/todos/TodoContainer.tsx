@@ -5,8 +5,16 @@ import { getTodos } from "../../api/todos";
 import Loading from "../layout/Loading";
 import Today from "./Today";
 import Search from "./Search";
+import {
+  useConnectActions,
+  useFilteredTodos,
+  useTodos,
+} from "../../store/connect-store";
 
 const TodoContainer = () => {
+  const todos = useTodos();
+  const { setTodos } = useConnectActions();
+  const filteredTodos = useFilteredTodos();
 
   const query = useQuery({
     queryKey: ["todos"],
@@ -21,8 +29,16 @@ const TodoContainer = () => {
     return <div>에러가 발생했습니다.{query.isError}</div>;
   }
 
-  const workingTodos = query?.data?.filter((todos) => !todos.isDone) ?? [];
-  const doneTodos = query?.data?.filter((todos) => todos.isDone) ?? [];
+  //검색 데이터
+  const allTodos = query?.data ?? [];
+  setTodos(allTodos);
+
+  // 필터링된 결과가 없을 경우 원래의 todos 리스트를 사용
+  const todosToDisplay = filteredTodos.length > 0 ? filteredTodos : todos;
+
+  // 필터링된 결과나 원래 리스트를 사용하여 작업 및 완료된 할 일 목록을 계산
+  const workingTodos = todosToDisplay.filter((todo) => !todo.isDone);
+  const doneTodos = todosToDisplay.filter((todo) => todo.isDone);
 
   return (
     <main className="main">

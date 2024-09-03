@@ -21,7 +21,9 @@ export interface TodoItem {
 
 export interface ConnectState {
   todos: Todo[];
+  filteredTodos: Todo[];
   actions: {
     setTodos: (todos: Todo[]) => void;
+    setFilteredTodos: (item: Todo[]) => void;
   };
 }
