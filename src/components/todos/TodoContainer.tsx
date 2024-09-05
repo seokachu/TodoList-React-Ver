@@ -2,6 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import TodoForm from "./TodoForm";
 import TodoList from "./TodoList";
 import { getTodos } from "../../api/todos";
+import NotFoundPage from "../../not-found";
 import Loading from "../layout/Loading";
 import Today from "./Today";
 import Search from "./Search";
@@ -26,7 +27,7 @@ const TodoContainer = () => {
   }
 
   if (query.isError) {
-    return <div>에러가 발생했습니다.{query.isError}</div>;
+    return <NotFoundPage />;
   }
 
   //검색 데이터
